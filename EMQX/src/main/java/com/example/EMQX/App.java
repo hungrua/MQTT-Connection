@@ -11,7 +11,7 @@ public class App {
         String pubTopic = "device/deviceHung";
         String content = "Hello Worldsadsad";
         int qos = 0;
-        String broker = "tcp://192.168.100.2:1883";
+        String broker = "tcp://192.168.100.13:1883";
         String clientId = "test";
         MemoryPersistence persistence = new MemoryPersistence();
 

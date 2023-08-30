@@ -8,29 +8,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class EMQXClientAPI {
-    public static void main(String[] args) {
+    private String username = "5a5372f7f89068f4";
+    private String password = "Adz9C2wEnOHKglMDFpJlBKKGyb81foTk10ePT5rD6T5J";
+
+    public String checkExistClient(String clientId) {
         try {
-            String username = "5a5372f7f89068f4";
-            String password = "Adz9C2wEnOHKglMDFpJlBKKGyb81foTk10ePT5rD6T5J";
-            String clientId = "Trong_Huong";
+
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
                     .url("http://localhost:18083/api/v5/clients/"+clientId)
                     .header("Content-Type", "application/json")
-                    .header("Authorization", Credentials.basic(username, password))
+                    .header("Authorization", Credentials.basic(this.username, this.password))
                     .build();
             Response response = client.newCall(request).execute();
             String responseBody = response.body().string();
-            System.out.println(responseBody);
-//            Gson gson = new Gson();
-//            JsonObject jsonObject = gson.fromJson(responseBody, JsonObject.class);
-//            JsonObject meta = jsonObject.getAsJsonObject("meta");
-//            int count = meta.get("count").getAsInt();
-//            System.out.println("Number of connections: " + count);
+            Gson gson = new Gson();
+            JsonObject jsonObject = gson.fromJson(responseBody,JsonObject.class);
+            try{
+                String messageCode = jsonObject.get("code").getAsString();
+                return messageCode;
+            }
+            catch (Exception e){
+                JsonObject meta = jsonObject.getAsJsonObject("meta");
+                int count = meta.get("count").getAsInt();
+                return count+"";
+            }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
     }
 
